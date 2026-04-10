@@ -9,40 +9,24 @@ export default async function SupportPage() {
   if (!user) return null
 
   return (
-    <div className="page-wrapper">
-      {/* Header */}
-      <header className="header">
-        <div className="header-inner">
-          <Link href="/app/home" className="logo logo-link">
-            <div className="logo-icon logo-icon-sm">🥗</div>
-            <span className="logo-text logo-text-sm">NutriPlan<span>AI</span></span>
-          </Link>
-          <div className="flex items-center gap-16">
-            <Link href="/app/home" className="btn btn-ghost btn-sm">
-              🏠 Início
-            </Link>
-            <Link href="/app/history" className="btn btn-ghost btn-sm">
-              📋 Planos
-            </Link>
-          </div>
+    <div className="immersive-chat-layout">
+      {/* Mini Header / Top Bar */}
+      <div className="chat-top-bar">
+        <Link href="/app/home" className="btn-chat-back">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-20 h-20">
+            <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Home
+        </Link>
+        <div className="chat-top-title">
+          <span className="dot-online"></span>
+          Suporte NutriPlanAI
         </div>
-      </header>
+        <div className="w-48 h-10"></div> {/* Spacer for symmetry */}
+      </div>
 
-      <main className="support-main">
-        <div className="container-wide chat-page-container">
-          <div className="support-header animate-fade-in-up">
-            <h1 className="support-title">
-              💬 Centro de <span>Suporte</span>
-            </h1>
-            <p className="support-desc">
-              Tire suas dúvidas sobre alimentação, treinos ou sobre o funcionamento do app com nossa IA.
-            </p>
-          </div>
-
-          <div className="card chat-full-card animate-fade-in-up stagger-1">
-            <SupportChatFull />
-          </div>
-        </div>
+      <main className="chat-content-fixed">
+        <SupportChatFull />
       </main>
     </div>
   )

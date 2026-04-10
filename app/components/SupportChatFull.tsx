@@ -13,6 +13,7 @@ export default function SupportChatFull() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     async function loadProfile() {
@@ -37,6 +38,14 @@ export default function SupportChatFull() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
   }, [messages])
+
+  // Auto-ajuste da altura do campo de texto
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+    }
+  }, [input])
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault()
@@ -74,16 +83,6 @@ export default function SupportChatFull() {
 
   return (
     <div className="chat-full-container">
-      <div className="chat-full-header">
-        <div className="flex items-center gap-12">
-          <div className="chat-header-icon-large">🥗</div>
-          <div>
-            <h2 className="chat-full-title">Suporte NutriPlanAI</h2>
-            <p className="chat-full-status">• Assistente de IA Online</p>
-          </div>
-        </div>
-      </div>
-
       <div className="chat-full-messages" ref={scrollRef}>
         {messages.map((m, i) => (
           <div key={i} className={`chat-msg-large ${m.role === 'user' ? 'chat-msg-user-large' : 'chat-msg-ai-large'}`}>
@@ -91,8 +90,12 @@ export default function SupportChatFull() {
           </div>
         ))}
         {loading && (
-          <div className="chat-msg-large chat-msg-ai-large chat-msg-loading">
-            <span className="typing-indicator">Digitando...</span>
+          <div className="chat-msg-large chat-msg-ai-large">
+            <div className="chat-msg-content typing-box">
+              <span className="dot"></span>
+              <span className="dot"></span>
+              <span className="dot"></span>
+            </div>
           </div>
         )}
       </div>
@@ -101,6 +104,7 @@ export default function SupportChatFull() {
         <div className="chat-input-wrapper">
           <form onSubmit={handleSend} className="chat-full-input-row">
             <textarea
+              ref={textareaRef}
               className="chat-input-textarea"
               placeholder="Pergunte qualquer coisa sobre sua dieta..."
               value={input}

@@ -121,6 +121,7 @@ export default function SupportChatFull() {
               type="submit" 
               className="btn-send-zen"
               disabled={loading || !input.trim()}
+              title="Enviar mensagem"
             >
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-20 h-20">
                 <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>

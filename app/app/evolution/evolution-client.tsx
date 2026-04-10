@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import SupportChat from '@/app/components/SupportChat'
 
 interface WeightEntry {
   id: string
@@ -178,7 +177,13 @@ export default function EvolutionClient({ initialHistory, startingWeight, userId
                 </p>
               </div>
             ) : (
-              <svg viewBox="0 0 100 100" className="chart-line" preserveAspectRatio="none">
+              <svg 
+                viewBox="0 0 100 100" 
+                className="chart-line" 
+                preserveAspectRatio="none"
+                width="100%"
+                height="100%"
+              >
                 <polyline
                   points={points}
                   className="chart-polyline chart-polyline-style"
@@ -210,7 +215,7 @@ export default function EvolutionClient({ initialHistory, startingWeight, userId
 
       </div>
 
-      <SupportChat />
+      {/* No longer using floating SupportChat as we have a dedicated page */}
 
       {/* Modal de Confirmação de Exclusão */}
       {itemToDelete && (

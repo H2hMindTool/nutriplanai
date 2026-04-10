@@ -96,32 +96,7 @@ export default function HomePage() {
   return (
     <div className="page-wrapper">
       
-      {/* Header */}
-      <header className="header">
-        <div className="header-inner">
-          <div className="logo">
-            <div className="logo-icon hero-logo-icon btn-novo-plano">🥗</div>
-            <span className="logo-text hero-logo-text">NutriPlan<span>AI</span></span>
-          </div>
-          <div className="flex items-center gap-16">
-            {perfil?.objetivo && (
-              <span className="badge badge-lime">
-                {objetivoLabels[perfil.objetivo] || perfil.objetivo}
-              </span>
-            )}
-            <span className="user-email">{userEmail}</span>
-            <Link href="/app/evolution" className="btn btn-ghost btn-sm">
-              📈 Evolução
-            </Link>
-            <Link href="/app/history" className="btn btn-ghost btn-sm">
-              📋 Meus Planos
-            </Link>
-            <button className="btn btn-ghost btn-sm" onClick={handleLogout}>
-              Sair
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* Main content starts below global TopBar */}
 
       {/* Main */}
       <main className="home-main">

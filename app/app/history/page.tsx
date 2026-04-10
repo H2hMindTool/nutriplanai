@@ -19,23 +19,7 @@ export default async function HistoryPage() {
   return (
     <div className="page-wrapper">
 
-      {/* Header */}
-      <header className="header">
-        <div className="header-inner">
-          <Link href="/app/home" className="logo logo-link">
-            <div className="logo-icon logo-icon-sm">🥗</div>
-            <span className="logo-text logo-text-sm">NutriPlan<span>AI</span></span>
-          </Link>
-          <div className="flex items-center gap-12">
-            <Link href="/app/evolution" className="btn btn-ghost btn-sm">
-              📈 Evolução
-            </Link>
-            <Link href="/app/home" className="btn btn-primary btn-novo-plano">
-              + Novo Plano
-            </Link>
-          </div>
-        </div>
-      </header>
+      {/* Navigation managed by global TopBar */}
 
       <main className="history-main">
         <div className="container-wide">

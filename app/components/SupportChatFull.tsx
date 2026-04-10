@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
 interface Message {
   role: 'user' | 'ai'
@@ -13,23 +14,43 @@ export default function SupportChatFull() {
   const [loading, setLoading] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const supabase = createClient()
 
   useEffect(() => {
-    async function loadProfile() {
-      const { createClient } = await import('@/lib/supabase/client')
-      const supabase = createClient()
+    async function initChat() {
       const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        const { data } = await supabase.from('profiles').select('nome').eq('id', user.id).single()
-        if (data?.nome) {
-          setMessages([{ role: 'ai', content: `Olá, ${data.nome}! Sou seu assistente NutriPlanAI. Como posso te ajudar com sua dieta hoje?` }])
-        } else {
-          setMessages([{ role: 'ai', content: 'Olá! Sou seu assistente NutriPlanAI. Como posso te ajudar com sua dieta hoje?' }])
-        }
+      if (!user) return
+
+      // 1. Fetch History
+      const { data: history } = await supabase
+        .from('chat_messages')
+        .select('role, content')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: true })
+        .limit(50)
+
+      if (history && history.length > 0) {
+        setMessages(history.map(m => ({
+          role: m.role === 'assistant' ? 'ai' : 'user',
+          content: m.content
+        })))
+      } else {
+        // 2. Fetch User Name for Greeting if no history
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('nome')
+          .eq('id', user.id)
+          .single()
+
+        const greeting = profile?.nome 
+          ? `Olá, ${profile.nome}! Sou seu assistente NutriPlanAI. Como posso te ajudar com sua dieta hoje?`
+          : 'Olá! Sou seu assistente NutriPlanAI. Como posso te ajudar com sua dieta hoje?'
+        
+        setMessages([{ role: 'ai', content: greeting }])
       }
     }
-    loadProfile()
-  }, [])
+    initChat()
+  }, [supabase])
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -50,8 +71,20 @@ export default function SupportChatFull() {
 
     const userMsg = input.trim()
     setInput('')
+    
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return
+
+    // Pre-add to UI
     setMessages(prev => [...prev, { role: 'user', content: userMsg }])
     setLoading(true)
+
+    // 1. Save User Message to Supabase
+    await supabase.from('chat_messages').insert({
+      user_id: user.id,
+      role: 'user',
+      content: userMsg
+    })
 
     try {
       const response = await fetch('/api/chat', {
@@ -67,12 +100,21 @@ export default function SupportChatFull() {
 
       const data = await response.json()
       if (data.content) {
+        // 2. Add AI Response to UI
         setMessages(prev => [...prev, { role: 'ai', content: data.content }])
+        
+        // 3. Save AI Message to Supabase
+        await supabase.from('chat_messages').insert({
+          user_id: user.id,
+          role: 'assistant',
+          content: data.content
+        })
       } else {
         throw new Error()
       }
     } catch {
-      setMessages(prev => [...prev, { role: 'ai', content: 'Ops, tive um problema para responder. Tente novamente em instantes.' }])
+      const errorMsg = 'Ops, tive um problema para responder. Tente novamente em instantes.'
+      setMessages(prev => [...prev, { role: 'ai', content: errorMsg }])
     } finally {
       setLoading(false)
     }
@@ -100,7 +142,22 @@ export default function SupportChatFull() {
       <div className="chat-full-input-area">
         <div className="chat-input-wrapper-gpt">
           <form onSubmit={handleSend} className="chat-full-input-row">
-            {/* Send Button on the LEFT as requested */}
+            <textarea
+              ref={textareaRef}
+              className="chat-input-textarea"
+              placeholder="Pergunte ao NutriPlanAI..."
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault()
+                  handleSend(e as any)
+                }
+              }}
+              rows={1}
+            />
+
+            {/* Send Button on the RIGHT */}
             <button 
               type="submit" 
               className="btn-send-gpt"
@@ -111,21 +168,6 @@ export default function SupportChatFull() {
                 <path d="M12 18V6M12 6L7 11M12 6L17 11" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
-
-            <textarea
-              ref={textareaRef}
-              className="chat-input-textarea"
-              placeholder="Pergunte ao NutriPlanAI..."
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault()
-                  handleSend(e as any)
-                }
-              }}
-              rows={1}
-            />
           </form>
         </div>
       </div>

@@ -39,7 +39,7 @@ const navItems = [
     ) 
   },
   { 
-    name: 'Dúvidas', 
+    name: 'Suporte', 
     path: '/app/support', 
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-24 h-24">
@@ -52,22 +52,23 @@ const navItems = [
 export default function MobileNav() {
   const pathname = usePathname()
 
-  if (['/login', '/register', '/'].includes(pathname)) return null
+  if (['/login', '/register', '/', '/onboarding', '/acesso-negado'].includes(pathname)) return null
 
   return (
-    <nav className="mobile-nav-zen">
-      <div className="mobile-nav-inner-zen">
+    <nav className="mobile-nav-standard">
+      <div className="mobile-nav-inner">
         {navItems.map((item) => {
           const isActive = pathname === item.path
           return (
             <Link 
               key={item.path} 
               href={item.path} 
-              className={`nav-item-zen ${isActive ? 'active' : ''}`}
+              className={`nav-item ${isActive ? 'active' : ''}`}
             >
-              <div className="nav-icon-zen">
+              <div className="nav-icon">
                 {item.icon}
               </div>
+              <span className="nav-label">{item.name}</span>
             </Link>
           )
         })}

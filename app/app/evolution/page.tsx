@@ -24,23 +24,7 @@ export default async function EvolutionPage() {
 
   return (
     <div className="page-wrapper">
-      {/* Header */}
-      <header className="header">
-        <div className="header-inner">
-          <Link href="/app/home" className="logo logo-link">
-            <div className="logo-icon logo-icon-sm">🥗</div>
-            <span className="logo-text logo-text-sm">NutriPlan<span>AI</span></span>
-          </Link>
-          <div className="flex items-center gap-16">
-             <Link href="/app/home" className="btn btn-ghost btn-sm">
-              🏠 Início
-            </Link>
-            <Link href="/app/history" className="btn btn-ghost btn-sm">
-              📋 Planos
-            </Link>
-          </div>
-        </div>
-      </header>
+      {/* Navigation managed by global TopBar */}
 
       <main className="evolution-main">
         <div className="container">

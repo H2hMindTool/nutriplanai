@@ -9,7 +9,6 @@ interface Message {
 
 export default function SupportChatFull() {
   const [messages, setMessages] = useState<Message[]>([])
-  const [userName, setUserName] = useState('')
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -23,10 +22,9 @@ export default function SupportChatFull() {
       if (user) {
         const { data } = await supabase.from('profiles').select('nome').eq('id', user.id).single()
         if (data?.nome) {
-          setUserName(data.nome)
-          setMessages([{ role: 'ai', content: `Olá, ${data.nome}! Como posso te ajudar hoje?` }])
+          setMessages([{ role: 'ai', content: `Olá, ${data.nome}! Sou seu assistente NutriPlanAI. Como posso te ajudar com sua dieta hoje?` }])
         } else {
-          setMessages([{ role: 'ai', content: 'Olá! Como posso te ajudar hoje?' }])
+          setMessages([{ role: 'ai', content: 'Olá! Sou seu assistente NutriPlanAI. Como posso te ajudar com sua dieta hoje?' }])
         }
       }
     }
@@ -39,7 +37,6 @@ export default function SupportChatFull() {
     }
   }, [messages])
 
-  // Auto-ajuste da altura do campo de texto
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto'
@@ -85,12 +82,12 @@ export default function SupportChatFull() {
     <div className="chat-full-container">
       <div className="chat-full-messages" ref={scrollRef}>
         {messages.map((m, i) => (
-          <div key={i} className={`chat-msg-large ${m.role === 'user' ? 'chat-msg-user-large' : 'chat-msg-ai-large'}`}>
+          <div key={i} className={`chat-msg-large ${m.role === 'user' ? 'chat-msg-user-gpt' : 'chat-msg-ai-gpt'}`}>
             <div className="chat-msg-content">{m.content}</div>
           </div>
         ))}
         {loading && (
-          <div className="chat-msg-large chat-msg-ai-large">
+          <div className="chat-msg-large chat-msg-ai-gpt">
             <div className="chat-msg-content typing-box">
               <span className="dot"></span>
               <span className="dot"></span>
@@ -101,12 +98,24 @@ export default function SupportChatFull() {
       </div>
 
       <div className="chat-full-input-area">
-        <div className="chat-input-wrapper-zen">
+        <div className="chat-input-wrapper-gpt">
           <form onSubmit={handleSend} className="chat-full-input-row">
+            {/* Send Button on the LEFT as requested */}
+            <button 
+              type="submit" 
+              className="btn-send-gpt"
+              disabled={loading || !input.trim()}
+              title="Enviar mensagem"
+            >
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-20 h-20">
+                <path d="M12 18V6M12 6L7 11M12 6L17 11" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+
             <textarea
               ref={textareaRef}
               className="chat-input-textarea"
-              placeholder="Digite sua dúvida..."
+              placeholder="Pergunte ao NutriPlanAI..."
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={(e) => {
@@ -117,16 +126,6 @@ export default function SupportChatFull() {
               }}
               rows={1}
             />
-            <button 
-              type="submit" 
-              className="btn-send-zen"
-              disabled={loading || !input.trim()}
-              title="Enviar mensagem"
-            >
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-20 h-20">
-                <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
           </form>
         </div>
       </div>

@@ -1998,3 +1998,129 @@ html, body {
 .modal-actions button {
   flex: 1;
 }
+/* ===== MOBILE BOTTOM NAV ===== */
+.mobile-nav-container {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(30, 30, 30, 0.9);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  height: 64px;
+  z-index: 1000;
+  padding: 0 10px;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  flex: 1;
+  transition: all 0.2s ease;
+  height: 100%;
+}
+
+.mobile-nav-item.active {
+  color: var(--lime);
+}
+
+.mobile-nav-icon {
+  font-size: 20px;
+}
+
+.mobile-nav-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ===== RESPONSIVE OVERRIDES ===== */
+@media (max-width: 768px) {
+  .mobile-nav-container {
+    display: flex;
+  }
+
+  /* Adjust page wrapper for bottom nav */
+  .page-wrapper {
+    padding-bottom: 64px;
+  }
+
+  .container-wide {
+    padding: 0 16px;
+  }
+
+  /* Hide redundant desktop nav elements */
+  .header-inner > div:nth-child(2) {
+    display: none;
+  }
+
+  .header {
+    padding: 12px 16px;
+  }
+
+  .logo-text {
+    font-size: 18px;
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .evolution-title, .history-title, .diet-render h1 {
+    font-size: 1.8rem !important;
+  }
+
+  .card {
+    padding: 24px 16px;
+  }
+
+  .btn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  .macro-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .macro-value {
+    font-size: 18px;
+  }
+
+  /* Support chat adjustment */
+  .chat-widget-container {
+    bottom: 80px; /* Above mobile nav */
+    right: 16px;
+  }
+
+  .chat-bubble-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+}
+
+/* Fix for touch targets */
+.btn-delete-history {
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
+}
+
+.weight-log-item {
+  padding: 16px;
+}

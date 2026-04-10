@@ -1,8 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import MobileNav from "./components/MobileNav";
 
 export const viewport: Viewport = {
   themeColor: "#9ACD32",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export const metadata: Metadata = {
@@ -19,7 +24,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body>
+        {children}
+        <MobileNav />
+      </body>
     </html>
   );
 }

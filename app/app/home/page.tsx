@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import SupportChat from '@/app/components/SupportChat'
 
 export default function HomePage() {
   const router = useRouter()
@@ -202,7 +201,6 @@ export default function HomePage() {
         </div>
       </main>
 
-      <SupportChat />
     </div>
   )
 }

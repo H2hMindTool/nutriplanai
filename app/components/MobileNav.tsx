@@ -12,7 +12,8 @@ export default function MobileNav() {
   const navItems = [
     { label: 'Início', href: '/app/home', icon: '🏠' },
     { label: 'Evolução', href: '/app/evolution', icon: '📈' },
-    { label: 'Meus Planos', href: '/app/history', icon: '📋' },
+    { label: 'Planos', href: '/app/history', icon: '📋' },
+    { label: 'Dúvidas', href: '/app/support', icon: '💬' },
   ]
 
   return (

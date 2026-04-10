@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import EvolutionClient from './evolution-client'
-import SupportChat from '@/app/components/SupportChat'
 
 export default async function EvolutionPage() {
   const supabase = await createClient()
@@ -62,7 +61,6 @@ export default async function EvolutionPage() {
         </div>
       </main>
 
-      <SupportChat />
     </div>
   )
 }

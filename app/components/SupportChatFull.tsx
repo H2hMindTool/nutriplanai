@@ -81,22 +81,40 @@ export default function SupportChatFull() {
       </div>
 
       <div className="chat-full-input-area">
-        <form onSubmit={handleSend} className="chat-full-input-row">
-          <input
-            type="text"
-            className="form-input chat-input-large"
-            placeholder="Tire sua dúvida sobre nutrição ou sobre o app..."
-            value={input}
-            onChange={e => setInput(e.target.value)}
-          />
-          <button 
-            type="submit" 
-            className="btn btn-primary btn-send-large"
-            disabled={loading}
-          >
-            {loading ? '...' : 'Enviar ✨'}
-          </button>
-        </form>
+        <div className="chat-input-wrapper">
+          <form onSubmit={handleSend} className="chat-full-input-row">
+            <textarea
+              className="chat-input-textarea"
+              placeholder="Pergunte qualquer coisa sobre sua dieta..."
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault()
+                  handleSend(e as any)
+                }
+              }}
+              rows={1}
+            />
+            <button 
+              type="submit" 
+              className="btn-send-ai"
+              disabled={loading || !input.trim()}
+              title="Enviar mensagem"
+            >
+              {loading ? (
+                <div className="btn-spinner-sm" />
+              ) : (
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="send-icon">
+                  <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+            </button>
+          </form>
+          <p className="chat-disclaimer">
+            NutriPlanAI pode cometer erros. Considere verificar informações importantes.
+          </p>
+        </div>
       </div>
     </div>
   )

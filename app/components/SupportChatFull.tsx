@@ -24,9 +24,9 @@ export default function SupportChatFull() {
         const { data } = await supabase.from('profiles').select('nome').eq('id', user.id).single()
         if (data?.nome) {
           setUserName(data.nome)
-          setMessages([{ role: 'ai', content: `Olá, ${data.nome}! Sou seu assistente NutriPlanAI. Como posso te ajudar com sua dieta hoje?` }])
+          setMessages([{ role: 'ai', content: `Olá, ${data.nome}! Como posso te ajudar hoje?` }])
         } else {
-          setMessages([{ role: 'ai', content: 'Olá! Sou seu assistente NutriPlanAI. Como posso te ajudar com sua dieta hoje?' }])
+          setMessages([{ role: 'ai', content: 'Olá! Como posso te ajudar hoje?' }])
         }
       }
     }
@@ -101,12 +101,12 @@ export default function SupportChatFull() {
       </div>
 
       <div className="chat-full-input-area">
-        <div className="chat-input-wrapper">
+        <div className="chat-input-wrapper-zen">
           <form onSubmit={handleSend} className="chat-full-input-row">
             <textarea
               ref={textareaRef}
               className="chat-input-textarea"
-              placeholder="Pergunte qualquer coisa sobre sua dieta..."
+              placeholder="Digite sua dúvida..."
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={(e) => {
@@ -119,22 +119,14 @@ export default function SupportChatFull() {
             />
             <button 
               type="submit" 
-              className="btn-send-ai"
+              className="btn-send-zen"
               disabled={loading || !input.trim()}
-              title="Enviar mensagem"
             >
-              {loading ? (
-                <div className="btn-spinner-sm" />
-              ) : (
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="send-icon">
-                  <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              )}
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-20 h-20">
+                <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </button>
           </form>
-          <p className="chat-disclaimer">
-            NutriPlanAI pode cometer erros. Considere verificar informações importantes.
-          </p>
         </div>
       </div>
     </div>

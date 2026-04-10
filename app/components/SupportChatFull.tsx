@@ -8,12 +8,29 @@ interface Message {
 }
 
 export default function SupportChatFull() {
-  const [messages, setMessages] = useState<Message[]>([
-    { role: 'ai', content: 'Olá! Sou seu assistente NutriPlanAI. Em que posso te ajudar com sua dieta hoje?' }
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
+  const [userName, setUserName] = useState('')
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    async function loadProfile() {
+      const { createClient } = await import('@/lib/supabase/client')
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data } = await supabase.from('profiles').select('nome').eq('id', user.id).single()
+        if (data?.nome) {
+          setUserName(data.nome)
+          setMessages([{ role: 'ai', content: `Olá, ${data.nome}! Sou seu assistente NutriPlanAI. Como posso te ajudar com sua dieta hoje?` }])
+        } else {
+          setMessages([{ role: 'ai', content: 'Olá! Sou seu assistente NutriPlanAI. Como posso te ajudar com sua dieta hoje?' }])
+        }
+      }
+    }
+    loadProfile()
+  }, [])
 
   useEffect(() => {
     if (scrollRef.current) {
